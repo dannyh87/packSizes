@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            border: 2px solid #ccc;
+            background: #efefef;
+            border-radius: 8px;
+            width: 50%;
+            margin: 0 auto;
+            padding: 1em;
+        }
+        #app h1 {
+            margin: 0;
+        }
+
+        input {
+            width: 250px;
+        }
+
+        textarea {
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Pack Size App</h1>
+        <div>
+            <p>
+                <label>Target:</label>
+                <input type="text" id="input" />
+            </p>
+            <p>
+                <label>Numbers:</label>
+                <input type="text" id="numbers" value="250,500,1000,2000,5000" />
+            </p>
+            <button onclick="sendRequest()">Click</button>
+        </div>
+        <div>
+            <textarea id="result"></textarea>
+        </div>
+    </div>
+
+    <script>
+        const url = '/packsize'
+        function sendRequest() {
+            const target = parseInt(document.getElementById('input').value)
+            const numbers = document.getElementById('numbers').value.split(',').map((a) => parseInt(a))
+            const payload = {
+                target,
+                numbers
+            }
+
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log('data', data)
+                document.getElementById('result').innerHTML = data.result.join(', ')
+            })
+        }
+
+    </script>
+</body>
+</html>
