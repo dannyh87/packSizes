@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"sort"
 )
 
 type Request struct {
@@ -15,11 +16,15 @@ type Response struct {
 	Result []int `json:"result"`
 }
 
+// Function to return array of packs
 func orderPackSize(x int, arr []int) ([]int, error) {
-	// arr := []int{250, 500, 1000, 2000, 5000}
+
 	result := []int{}
 
+	sort.Ints(arr)
+
 	remaining := x
+	//Iterate through packs starting at the largest see if remaining figure is larger that the pack size in the array
 	for i := len(arr) - 1; i >= 0; i-- {
 		packSize := arr[i]
 		for remaining >= packSize {
@@ -28,10 +33,12 @@ func orderPackSize(x int, arr []int) ([]int, error) {
 		}
 	}
 
+	//Resolves for final iteration
 	if remaining > 0 {
 		result = append(result, arr[0])
 	}
 
+	//If wastage is the same then only send one pack which is larger for efficiency
 	if len(result) >= 2 && result[len(result)-1] == result[len(result)-2] && (result[len(result)-1]+result[len(result)-2]) == arr[1] {
 		result = result[:len(result)-2]
 		result = append(result, arr[1])
@@ -41,15 +48,9 @@ func orderPackSize(x int, arr []int) ([]int, error) {
 	for _, v := range result {
 		sum += v
 	}
-	// wastage := sum - x
 
 	return result, nil
 
-	// return map[string]interface{}{
-	// 	"input":   x,
-	// 	"result":  result,
-	// 	"wastage": wastage,
-	// }, nil
 }
 
 func orderPackSizesHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +65,7 @@ func orderPackSizesHandler(w http.ResponseWriter, r *http.Request) {
 
 	var result, err2 = orderPackSize(req.Target, req.Numbers)
 	if err2 != nil {
-		// Do something ere
+		return
 	} else {
 		resp.Result = result
 	}
