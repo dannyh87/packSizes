@@ -5,4 +5,6 @@ The Node.js code was then translated to Go using material which was available on
 Postman was utilised to ensure the API was working as expected
 Front end was added using HTML, CSS and Vanilla JS.
 
+**Extension Activities**
+Try to match branding with GymShark and add additional information for the end user, such as wastage, number of packages.
 

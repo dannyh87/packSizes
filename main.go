@@ -27,6 +27,7 @@ func orderPackSize(x int, arr []int) ([]int, error) {
 	//Iterate through packs starting at the largest see if remaining figure is larger that the pack size in the array
 	for i := len(arr) - 1; i >= 0; i-- {
 		packSize := arr[i]
+		// Remove multiples of one pack whilst remainding is greater than or equal too (most likely the biggest pack size)
 		for remaining >= packSize {
 			result = append(result, packSize)
 			remaining -= packSize
@@ -42,11 +43,6 @@ func orderPackSize(x int, arr []int) ([]int, error) {
 	if len(result) >= 2 && result[len(result)-1] == result[len(result)-2] && (result[len(result)-1]+result[len(result)-2]) == arr[1] {
 		result = result[:len(result)-2]
 		result = append(result, arr[1])
-	}
-
-	sum := 0
-	for _, v := range result {
-		sum += v
 	}
 
 	return result, nil
