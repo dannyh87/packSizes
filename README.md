@@ -53,3 +53,4 @@ Front end was added using HTML, CSS and Vanilla JS.
 - Improve the styling to match Gymshark branding
 - Increase data which is provided to the end user such as total pack numbers and wastage
 - Keep a track of previous requests and responses
+- Add testing
