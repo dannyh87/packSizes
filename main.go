@@ -17,10 +17,14 @@ type Response struct {
 }
 
 // Function to return array of packs
-func orderPackSize(x int, arr []int) ([]int, error) {
+// Can remove tuple - error
+func orderPackSize(x int, arr []int) []int {
 
+	//Create empty array
 	result := []int{}
 
+	//Incase User doesn't input in ascending order
+	//Improvements - check for duplicates in array
 	sort.Ints(arr)
 
 	remaining := x
@@ -34,7 +38,7 @@ func orderPackSize(x int, arr []int) ([]int, error) {
 		}
 	}
 
-	//Resolves for final iteration
+	//Resolves for final iteration - if less than the smallest packsize it'll never trigger in the above loop
 	if remaining > 0 {
 		result = append(result, arr[0])
 	}
@@ -45,13 +49,14 @@ func orderPackSize(x int, arr []int) ([]int, error) {
 		result = append(result, arr[1])
 	}
 
-	return result, nil
+	return result
 
 }
 
+// route handler function
 func orderPackSizesHandler(w http.ResponseWriter, r *http.Request) {
-	var req Request
-	err := json.NewDecoder(r.Body).Decode(&req)
+	var payload Request
+	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -59,13 +64,8 @@ func orderPackSizesHandler(w http.ResponseWriter, r *http.Request) {
 
 	var resp Response
 
-	var result, err2 = orderPackSize(req.Target, req.Numbers)
-	if err2 != nil {
-		return
-	} else {
-		resp.Result = result
-	}
-
+	var result = orderPackSize(payload.Target, payload.Numbers)
+	resp.Result = result
 	json.NewEncoder(w).Encode(resp)
 }
 
